@@ -11,9 +11,9 @@ var oracledb = require('oracledb');
 var typaheadWords;
 var serverip = '0.0.0.0'; //hiding the organization IP address
 var pythonserverport = '8080';
-var hostname = '//MSB-MSITM.austin.utexas.edu';
-var usr = 'ak39629';
-var usrpwd = 'SCOU5sfW';
+var hostname = 'inserthostname';
+var usr = '******';
+var usrpwd = '*******';
 
 
 var monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
