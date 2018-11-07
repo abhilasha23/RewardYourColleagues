@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en" data-framework="angularjs">
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="node_modules/angular/bootstrap.min.js"></script>
+<script src="js/thirdparty/TypeAhead.js"></script>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/angular-resizable.min.css">
+    <style>[ng-cloak] {
+        display: none;
+    }</style>
+</head>
+<body ng-app="customapp">
+
+<ng-view/>
+
+<script type="text/ng-template" id="customapp-index.html">
+    <div class="container" style="width: 100%;">
+        <div class="" id="topicModelModal" data-ng-init="init()">
+
+            <div class="modal-body">
+
+                <div class="row " style="border-bottom: 1px solid;margin-bottom: 20px;" >
+                    <div class="col-md-4">
+                        <!--<a><img src="images/logo_black.svg" style="width:120px;"></a>-->
+                        <h4 style="display: inline;">MSITM Data Management Final Project</h4>
+                    </div>
+                    <div class="col-md-4" >
+                        <h3 align="center" style="margin-top: 0px">Reward your Colleagues!</h3>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="row" style="margin-left: 390px;margin-right: 300px;">
+                        <img src="images/dexter_logo.png" height="100" style="margin-left: 250px;">
+
+                    </div>
+                    <!--<div class="row input-group" id="adv-search" style="margin-left: 300px;margin-right: 300px;">-->
+                        <!--<table class="table table-striped table-bordered">-->
+                            <!--<tr>-->
+                                <!--<th ng-repeat="cols in productcoffee.metaData">{{cols.name}}</th>-->
+                            <!--</tr>-->
+                            <!--<tr ng-repeat="data in productcoffee.rows">-->
+                                <!--<td><b>{{data[0]}}</b></td>-->
+                                <!--<td><b>{{data[1]}}</b></td>-->
+                                <!--<td><b>{{data[2]}}</b></td>-->
+                                <!--<td><b>{{data[3]}}</b></td>-->
+                                <!--<td><b>{{data[4]}}</b></td>-->
+                            <!--</tr>-->
+                        <!--</table>-->
+                    <!--</div>-->
+
+                    <div class="row" ng-show="!loggedIn">
+                        <div class="container">
+                        <form class="form-signin">
+                            <h1 class="form-signin-heading text-muted">Sign In</h1>
+                            <input type="text" class="form-control username " ng-model="username" placeholder="Username" style="text-transform:uppercase" required="" autofocus="">
+                            <input type="password" class="form-control password" ng-model="password" id="showpwd" placeholder="Password" required="">
+
+                            <input type="checkbox" ng-click="togglepwd()" class="pwdcheckbox" style="margin-top: 10px;margin-bottom: 10px;margin-left: 5px;margin-right: 5px;">
+                            Show Password
+                            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="usersignin()">
+                                Sign In
+                            </button>
+                        </form>
+                        </div>
+
+                    </div>
+                    <div class=" row" ng-show="loggedIn">
+                        <div class="container">
+                            <div class="row" style="margin-bottom: 20px;">
+                            <div>WELCOME <b>{{userdetails.fname}} {{userdetails.lname}}!</b></div>
+                            </div>
+
+
+                           <div ng-show="userdetails.usertype=='Regular'">
+                            <div class="row" >
+                                <div style="margin-top: 5px; margin-bottom: 5px">
+
+                                    <ul class="nav nav-tabs">
+                                        <li ng-class="{ active: isSet(1) }"><a  href ng-click="setTab(1)">Give Points</a></li>
+                                        <li ng-class="{ active: isSet(2) }"><a  href ng-click="setTab(2)">Received Points</a></li>
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                            <div ng-show="isSet(1)">
+                                <div class="row" style="margin-bottom: 20px;">Total Points available to give : <b> {{userdetails.pointstogive}} <b></b></div>
+                                <div class="row" style="margin-bottom: 20px;">
+                                    <div class="col-md-6">
+                                        <div class="dropdown">
+                                            <span> <b>Select User : <b></b></span>
+                                            <span>
+                                            <button class="btn btn-primary dropdown-toggle"  type="button"  data-toggle="dropdown">{{userselected}}
+                                                <span class="caret"></span></button>
+                                            <ul class="dropdown-menu " >
+                                                <li ng-repeat="(key,value) in usermap" ng-if="value !== userdetails.usrname"><a ng-click="userSelect(key,value)">{{key}}</a></li>
+                                            </ul>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label " for="points"> Points to give :  <br></label>
+                                        <input type="text" id = "points" ng-model="givepoints" style="width: 40%" placeholder="Number of points to give" />
+
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-left: 500px;padding-right: 500px;">
+                                    <button type="button"  style="background-color: #eee;"
+                                            class="btn btn-default"
+                                            ng-click="givePoints()" >Give Points! </button>
+                                </div>
+
+                                <div class="row" style=" margin-top: 30px;">
+
+                                    <div style="margin-bottom: 10px;color: blue;">Points Given History</div>
+
+                                    <div>
+                                        <div ng-repeat="d in userdetails.giveHistory">
+                                            Gave {{d[1]}} points to {{d[0]}} on {{d[2]}}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div ng-show="isSet(2)">
+                                <div class="row">
+
+                                    <span>Points available to redeem :  </span> <span>{{userdetails.pointstoredeem}}</span>
+
+                                </div>
+                                <div class="row" style="margin-top: 30px;">
+
+                                    <div class="col-md-8">
+                                      <span ng-show="userdetails.pointstoredeem>=10000"> <span>Each 10,000 points equal 1 gift card of $100.You can redeem points in form of </span><span> <a data-toggle="modal" href="#redeempopup" target="_self"> {{userdetails.pointstoredeem/10000 | number:0}} gift cards</a></span></span>
+                                      <span ng-show="userdetails.pointstoredeem<10000"> Each 10,000 points equal 1 gift card of $100. You need more points to avail a gift card! </span>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal fade" id="redeempopup" style="width: auto" >
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button id="closepopup" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title">Redeem Points </h4>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div>
+                                                <label class="control-label " for="redeem"> Cards to redeem :  <br></label>
+                                                <input type="text" id = "redeem"  style="width: 40%" ng-model="numofcardstoredeem" placeholder="Number of gift cards to redeem" />
+                                                </div>
+                                                <div>
+                                                    <button type="button"  style="background-color: #eee;"
+                                                            class="btn btn-default"
+                                                            ng-click="redeemPoints()" >Redeem Points!
+                                                    </button>
+                                                </div>
+
+
+
+                                            </div>
+
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                                <div class="row" style=" margin-top: 30px;">
+                                    <div style="margin-bottom: 10px;color: blue;">Points Received History</div>
+
+                                    <div>
+                                        <div ng-repeat="d in userdetails.receiveHistory">
+                                            Received {{d[1]}} points from {{d[0]}} on {{d[2]}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div ng-show="userdetails.usertype=='Admin'">
+
+                            <div class="container">
+                                <div class="row">
+                                    <button class="btn btn-primary" type="submit" ng-click="ResetPoints()" style="float: right;">
+                                        Reset Points
+                                    </button>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4"><a ng-click="getAdminReport(1)">Report 1</a></div>
+                                    <div class="col-md-4"><a ng-click="getAdminReport(2)">Report 2</a></div>
+                                    <div class="col-md-4"><a ng-click="getAdminReport(3)">Report 3</a></div>
+                                </div>
+
+                                <div class="row well" style="margin-top: 20px;">
+                                <div class="row" ng-show="adminreport==1">
+                                    Report 1 : Aggregate usage of points on monthly basis
+
+                                    <div class="row input-group" id="adv-search" style="margin-left: 300px;margin-right: 300px;">
+                                    <table class="table table-striped table-bordered">
+                                    <tr>
+                                    <th ng-repeat="cols in report1Data.metaData">{{cols.name}}</th>
+                                    </tr>
+                                    <tr ng-repeat="data in report1Data.rows">
+                                    <td><b>{{data[0]}}</b></td>
+                                    <td><b>{{data[1]}}</b></td>
+                                    <td><b>{{data[2]}}</b></td>
+                                     <td><b>{{data[3]}}</b></td>
+                                    </tr>
+                                    </table>
+                                    </div>
+
+                                </div>
+                                <div class="row" ng-show="adminreport==2">
+                                    Report 2 : Users who have not given all their points are -
+
+                                    <div class="row input-group"  style="margin-left: 300px;margin-right: 300px;">
+                                        <table class="table table-striped table-bordered">
+                                            <tr>
+                                                <th ng-repeat="cols in report2Data.metaData" ng-show="cols.name != 'ID'">{{cols.name}}</th>
+                                            </tr>
+                                            <tr ng-repeat="data in report2Data.rows">
+                                                <td><b>{{data[1]}}</b></td>
+                                                <td><b>{{data[2]}}</b></td>
+                                                <td><b>{{data[3]}}</b></td>
+                                                <td><b>{{data[4]}}</b></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="row" ng-show="adminreport==3">
+                                    Report 3 : User Points Redeem Activity by Month<br>
+                                    Note : 1 gift card of $100= 10000 points
+                                    <div class="row input-group"  style="margin-left: 300px;margin-right: 300px;">
+                                        <table ng-show="report3Data.rows.length > 0" class="table table-striped table-bordered">
+                                            <tr>
+                                                <th ng-repeat="cols in report3Data.metaData" >{{cols.name}}</th>
+                                            </tr>
+                                            <tr ng-repeat="data in report3Data.rows">
+                                                <td><b>{{data[0]}}</b></td>
+                                                <td><b>{{data[1]}}</b></td>
+                                                <td><b>{{data[2]}}</b></td>
+                                            </tr>
+                                        </table>
+
+                                        <p ng-show="report3Data.rows.length == 0"> No Points Redeem activity available yet!</p>
+                                    </div>
+
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</script>
+
+<!--<script src="node_modules/angular/angular.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="node_modules/angular-route/angular-route.js"></script>
+<script src="node_modules/angular/ui-bootstrap-tpls-1.3.2.js"></script>
+<script src="node_modules/angular/angular-http-loader.min.js"></script>
+
+<!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>-->
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/app.js"></script>
+<script src="css/base.js"></script>
+<script src="js/controllers/CustomAppCtrl.js"></script>
+</body>
+</html>
